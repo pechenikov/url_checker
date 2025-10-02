@@ -1,0 +1,35 @@
+replicaCount: 1
+
+image:
+  repository: dimopechenikov/url_checker
+  tag: latest
+  pullPolicy: IfNotPresent  # or Always if you want to always pull the latest
+
+service:
+  type: ClusterIP
+  port: 8000
+
+urls:
+  - https://httpstat.us/200
+  - https://httpstat.us/503
+
+scrapeInterval: 10  # seconds
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: url-checker.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+serviceAccount:
+  create: false      # Set true if you want Helm to create a custom service account
+  name: ""   
